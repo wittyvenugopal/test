@@ -1,0 +1,82 @@
+Azure Databricks - Spark based Analytics platform..
+                   Fully managed service with ETL,analytics, Machine learning.
+
+Clusters are hearth, 
+Notebooks are muscles.. Notbooks are Interface to interact with databricks..
+
+
+Azure Data FActory: Unified platform for ETL on Azure. to create data plines..
+*supports 3 types of activities => data movement, data transformation, control activities.   
+*Bridge bw Activities(set of actions) and Linkedservices(target store or compute servoces)           
+        
+
+SSIs Integration Runtime: is Compute infructure used by ADF to perform data mvmt/transformations, package executions.
+
+SSIS Set up: NAme, Location, Node Size, Nodes, License  * If already SQL Server license - Hybrid benefit for  -SQL Server.
+
+             Location -> of DB server to host SSISDB,  Catalog DB SErver End popint ->End point of DB server to host SSISDB.
+  	      CAtalogue DB Service tier,     Max parallel executions per node.	
+             
+
+ * Deploy the package to Server(Which is SQL DB in cloud)  having SSIDDB provision. 
+
+* Create a schedule using Trigger -> Schedule, Tumbling Window(Advance properties), Event.
+
+* Scheduling via ADF / SSMS / 	On-Demand/Just in Time provisioning..
+
+ on demand provisioning:
+ 1) Collect Parameters : ADF name, Resource Group
+ 2) Create Azure Automation Account
+ 3) Go to Modules-> Browse Gallery -> Add AzureRM.Profile and AzureRM.DataFactoryV2
+ 4) Connections to check.. (ConnectionName, DFName, ResourceGroup, TenandId,ApplicationId, CertificateThumbprint)
+ 5) Add Runbooks as power shell Type. 2 seperate run books for pause and resume.
+ 6) Add code with details in step 4 for Pausing and Resuming Integration Runtime.
+
+	$IntegrationRuntime = Get-AzureRmDataFactoryV2IntegrationRuntime `
+                            -DataFactoryName $DataFactoryName `
+                            -ResourceGroupName $ResourceGroup
+ 7) Publish run books
+
+ 8) Adding Webhook. On RunBookpage -> For Pause/Resume SSIS -> Add a Webhook (Pause or Resume) - Set expirt date-Copy URL for both
+
+ 
+ Go to ADF pipelines..
+ a) ResumeIR add WebActivity.
+ b) Go to setting page, add URL and method as POST
+ c) Again add PauseIR WebActivity. and   Change it from default Success to Completion
+
+
+
+
+
+-------------------
+* Processed Nostram, Abacus,. .dat and .csv files being reported into ETL and modelled, Power BI reported...
+*Serverless, Less managed, No infrastructure, Less Cost, Less resourcs, Automated..... Continouis data generation..
+*Continuous processed details be loaded into SQL Server tables...Azure SQL Database....
+
+1)Azure DataBricks => Read the files .dat into Databricks => DataFrame API => rase
+		       Small scripting .sep("\s+") into DF.... save into Azure SQL Database....
+
+2) sql server data daily used for powerBI reporting ,. modelling..publishing.
+
+3) Azure DataFactory => SSIS packaging Automation.. 
+    (Moving files to archives daily)...Loading into Azure Blob storage...
+
+* "jdbs:sqlserver://" + dwserver + ".database.window.net"
+
+--- Microsoft Azure Storage Explorer.........
+
+SSIS: 1)Azure BloB Upload Task => (Connection String : StorageAccount,AccountKey).
+                  Source: Path, File: *
+                     
+*Create a Blob Service => testBlob (Blobcontainer).    Directory: test.
+
+a)MOveing on-premise SQL DB to Azure SQL DB (Create an instance and log to sql server).
+  SSIS => OLEDB Source to OLEDB Destination.
+b) AZure data mgmt gateway.. INt Services run Time..      
+
+
+-----------SQL DWH-----------
+*No cross joins
+*No indexes, No Identity, No Cursors, No stored procedures..No Merges...
+*
